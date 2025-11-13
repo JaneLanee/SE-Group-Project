@@ -1,9 +1,9 @@
-//import logo from './logo.svg';
 import './css/App.css';
 import Home from "./pages/Home"
 import {Routes, Route, BrowserRouter} from "react-router-dom"
 import Favorites from "./pages/Favorites";
 import NavBar from './components/NavBar';
+import MovieDetail from './pages/MovieDetail';
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Home />}/>
                         <Route path="/favorites" element={<Favorites />}/>
+                        <Route path="/movie/:id" element={<MovieDetail />}/>
                     </Routes>
                 </main>
           </div>
