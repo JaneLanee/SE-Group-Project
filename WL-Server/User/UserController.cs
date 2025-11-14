@@ -1,0 +1,76 @@
+using Microsoft.AspNetCore.Mvc;
+
+namespace WL_Server.User;
+
+//THIS FILE WILL HANDLE REQUESTS AND HANDLE RESPONSES WITH THE USER INTERFACE (FRONTEND)
+//STRICTLY FOR API RELATED ACTIVITY
+[ApiController]
+[Route("api/[controller]")] // https://localhost:5210/api/user/
+public class UserController : ControllerBase
+{
+    
+    //GRAB USER SERVICE FOR BUSINESS LOGIC IN CONTROLLERS
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+    
+    //TEST API
+    [HttpGet("")]
+    public string Index()
+    {
+        return "Wassup";
+    }
+
+    [HttpPost("testuser")]
+    public IActionResult TestGetUser([FromBody] User input)
+    {
+        Console.WriteLine(input.PwHash + " pain");
+        var result = _userService.TestGrab(input);
+        Console.WriteLine(result.PwHash + "pain 2");
+        return Ok(result);
+    }
+    
+    //POST TEST
+    [HttpPost("malone")]
+    public IActionResult Malone([FromBody] User value)
+    {
+        Console.WriteLine(value.PwHash);
+        Console.WriteLine(value);
+        return Ok(value);
+    }
+    
+    //USER SIGNUP
+    [HttpPost("signup")]
+    public IActionResult SignUp([FromBody] User input)
+    {
+        try
+        {
+            Console.WriteLine(input.username + " welcome ...");
+            _userService.SignUp(input);
+            return Ok("ok");
+        }
+        catch
+        {
+            return Ok("Error !!!");
+        }
+    }
+    
+    //USER LOGIN
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] User input)
+    {
+        try
+        {
+            _userService.Login((input));
+            return Ok("");
+        }
+        catch
+        {
+            return Ok("Error !!!");
+        }
+    }
+    
+}
