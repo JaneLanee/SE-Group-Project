@@ -1,9 +1,0 @@
-namespace WL_Server.User;
-
-
-//THIS FILE IS TO HANDLE THE APP AND BUSINESS LOGIC FOR THE USER MODEL
-//THE USER CONTROLLER FILE
-public class UserService
-{
-    
-}
