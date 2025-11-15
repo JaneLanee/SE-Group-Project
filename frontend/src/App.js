@@ -1,25 +1,28 @@
 import './css/App.css';
-import Home from "./pages/Home"
-import {Routes, Route, BrowserRouter} from "react-router-dom"
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Favorites from "./pages/Favorites";
-import NavBar from './components/NavBar';
-import MovieDetail from './pages/MovieDetail';
+import MovieDetail from "./pages/MovieDetail";
+import WriteReview from "./pages/WriteReview";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
-      <BrowserRouter>
-          <div>
-              <NavBar />
-                <main className="main-content">
-                    <Routes>
-                        <Route path="/" element={<Home />}/>
-                        <Route path="/favorites" element={<Favorites />}/>
-                        <Route path="/movie/:id" element={<MovieDetail />}/>
-                    </Routes>
-                </main>
-          </div>
-      </BrowserRouter>
+    <BrowserRouter>
+      <div>
+        <NavBar />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/movie/:id/review" element={<WriteReview />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
