@@ -1,0 +1,151 @@
+.user-page {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #242424;
+  min-height: 100vh;
+  color: #333;
+}
+
+.user-page-container {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.user-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-picture-placeholder {
+  width: 350px;
+  height: 350px;
+  background-color: rgb(186, 181, 181);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(67, 61, 61);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.edit-profile-picture {
+  width: 100%;
+  padding: 12px;
+  background: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.edit-profile-picture:hover {
+  opacity: 0.6;
+}
+
+.profile-description h2 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  border-bottom: 2px solid #646cff;
+  padding-bottom: 5px;
+}
+
+.profile-description p {
+  line-height: 15;
+  color: #666;
+  font-size: 1.1rem;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-biography {
+  width: 100%;
+  padding: 12px;
+  background: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.edit-biography:hover {
+  opacity: 0.6;
+}
+
+.profile-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.user-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px;
+  font-size: 2.5rem;
+  color: white;
+  margin: 0;
+  font-weight: bold;
+  border-bottom: 2px solid #646cff;
+  padding-bottom: 20px;
+}
+
+.editing-options h3 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.edit-user-button {
+  width: 100%;
+  padding: 20px;
+  background: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.edit-user-button:hover {
+  opacity: 0.6;
+}
+
+.user-watchlist {
+  display: flex;
+  gap: 30px;
+}
+
+.watchlist-card {
+  width: 120px;
+  height: 180px;
+  background: #ddd;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-weight: bold;
+}
+
+.edit-watchlist-button {
+  width: 100%;
+  padding: 20px;
+  background: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
