@@ -7,4 +7,6 @@ public interface IUserService
     public bool Login(User user);
 
     public User TestGrab(User user);
+
+    public User FetchUserByUsername(string username);
 }

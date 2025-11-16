@@ -14,10 +14,10 @@ public class Watchlist
     public int? UserId { get; set; }
     
     //WATCHLIST Movie_Id string
-    public string? MovieId { get; set; }
+    public int? MovieId { get; set; }
     
     //WATCHLIST status enum STATUS
-    public StatusType Status { get; set; } = StatusType.WantToWatch;
+    public StatusType? Status { get; set; } = StatusType.WantToWatch;
     
     //WATCHLIST personal_rating decimal
     public float? PersonalRating { get; set; }

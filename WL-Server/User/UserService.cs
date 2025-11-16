@@ -102,4 +102,20 @@ public class UserService : IUserService
         return result;
     }
     
+    //FETCH USER INFO BY USERNAME
+    public User FetchUserByUsername(string username)
+    {
+        var findUser = new User();
+        findUser.username = username;
+
+        //CHECK IF USER EXISTS
+        var user = _userRepository.GetByUsername(findUser);
+        
+        if (user != null)
+        {
+            return user;
+        }
+
+        return null;
+    }
 }

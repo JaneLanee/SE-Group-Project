@@ -17,12 +17,6 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-    //TEST API
-    [HttpGet("")]
-    public string Index()
-    {
-        return "Wassup";
-    }
 
     [HttpPost("testuser")]
     public IActionResult TestGetUser([FromBody] User input)
@@ -33,17 +27,9 @@ public class UserController : ControllerBase
         return Ok(result);
     }
     
-    //POST TEST
-    [HttpPost("malone")]
-    public IActionResult Malone([FromBody] User value)
-    {
-        Console.WriteLine(value.PwHash);
-        Console.WriteLine(value);
-        return Ok(value);
-    }
     
     //USER SIGNUP
-    [HttpPost("signup")]
+    [HttpPost("signup")] // https://localhost:5210/api/user/signup
     public IActionResult SignUp([FromBody] User input)
     {
         try
@@ -59,7 +45,7 @@ public class UserController : ControllerBase
     }
     
     //USER LOGIN
-    [HttpPost("login")]
+    [HttpPost("login")] // https://localhost:5210/api/user/login
     public IActionResult Login([FromBody] User input)
     {
         try
@@ -69,7 +55,29 @@ public class UserController : ControllerBase
         }
         catch
         {
-            return Ok("Error !!!");
+            return Ok("Error");
+        }
+    }
+    
+    //GET USER INFO BY USERNAME
+    [HttpGet("{username}")] // https://localhost:5210/api/user/{username}
+    public IActionResult FetchUser(string username)
+    {
+        
+        try
+        {
+            var findUser = _userService.FetchUserByUsername(username);
+
+            if (findUser != null)
+            {
+                return Ok(findUser);
+            }
+            
+            return Ok("User not found");
+        }
+        catch
+        {
+            return Ok("Error");
         }
     }
     
