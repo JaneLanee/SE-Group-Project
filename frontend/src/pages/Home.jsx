@@ -12,6 +12,8 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const location = useLocation();
 
+
+  // Fetches popular movies, resets search state when navigating back to home.
   useEffect(() => {
     setIsSearching(false);
     setQuery("");
@@ -23,6 +25,8 @@ export default function Home() {
 
   }, [location]);
 
+  //Handles movie search submission
+  //If query is empty it resets to popular movies. Otherwise searches API
   function handleSearch(e) {
     e.preventDefault();
     if (!query.trim()) {
@@ -55,7 +59,7 @@ export default function Home() {
         />
         <button className="search-button">Search</button>
       </form>
-
+      {/* Personalized recommendations row*/}
       {!isSearching && (
         <div className="movie-row-container">
           <h2 className="row-title">Recommended For You</h2>
@@ -78,7 +82,7 @@ export default function Home() {
           </div>
         </div>
       )}
-
+      {/* Popular movies or search results row */}
       <div className="movie-row-container">
         <h2 className="row-title">{isSearching ? "Search Results" : "Popular Movies"}</h2>
         <div className="movie-row">

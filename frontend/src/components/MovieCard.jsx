@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 function MovieCard({ movie }) {
     const navigate = useNavigate();
 
+    //Handles favorite button click
+    //TODO: Connect the backend and send the favorites down when User click
     function onClickFavorite(e) {
         e.stopPropagation();
         alert("clicked favorite");
     }
-
+    
     function onClickMovie() {
         navigate(`/movie/${movie.id}`);
     }

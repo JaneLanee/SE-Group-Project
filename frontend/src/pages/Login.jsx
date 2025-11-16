@@ -7,6 +7,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
+  //Handle login submission form
   const submitLogin = (e) => {
     e.preventDefault();
     
