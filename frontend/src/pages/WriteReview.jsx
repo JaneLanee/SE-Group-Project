@@ -10,6 +10,8 @@ function WriteReview() {
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
+  //Handles review form submission
+  //Validates rating, preps review data, and goes back to movie detail
   const submitReview = (e) => {
     e.preventDefault();
 

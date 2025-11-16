@@ -11,6 +11,8 @@ function MovieDetail() {
     const [movie, setMovie] = useState(null);
     const [recommendations, setRecommendations] = useState([]);
 
+    // fetch movie details from API
+    // TODO: fetch recommended movies from backend, right now just blank recommendation fetch for API
     useEffect(() => {
         async function loadMovie() {
             const res = await fetch(
@@ -32,9 +34,10 @@ function MovieDetail() {
         loadRecommendations();
     }, [id]);
 
+    //Converts 0-10 rating to 5-star scale and display
     const renderStars = (rating) => {
         const stars = [];
-        const wholeRating = Math.round(rating);
+        const wholeRating = Math.round(rating / 2);
 
         for (let i = 1; i <= 5; i++) {
             stars.push(
@@ -56,7 +59,7 @@ function MovieDetail() {
     return (
         <div className="movie-detail">
             <div className="movie-detail-container">
-
+                {/* Left column: Poster and action buttons */}
                 <div className="movie-poster-section">
                     <div className="detail-poster">
                         <img
@@ -72,7 +75,7 @@ function MovieDetail() {
                         📑 Add to Watchlist
                     </button>
                 </div>
-
+                {/* Middle column: Title, description, and recommendations */}
                 <div className="movie-info-section">
                     <h1 className="movie-title">{movie.title}</h1>
 
@@ -109,7 +112,7 @@ function MovieDetail() {
                         </div>
                     </div>
                 </div>
-
+                {/* Right column: Rating, review button, and reviews list */}
                 <div className="movie-review-section">
 
                     <div className="rating-section">

@@ -10,6 +10,7 @@ function Signup() {
   const [dob, setDob] = useState("");
   const navigate = useNavigate();
 
+  //Handles signup form submission
   const submitSignup = (e) => {
     e.preventDefault();
 
