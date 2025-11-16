@@ -5,6 +5,8 @@ import Favorites from "./pages/Favorites";
 import MovieDetail from "./pages/MovieDetail";
 import WriteReview from "./pages/WriteReview";
 import NavBar from "./components/NavBar";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
             <Route path="/movie/:id/review" element={<WriteReview />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </main>
       </div>
