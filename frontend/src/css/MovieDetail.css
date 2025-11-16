@@ -1,20 +1,36 @@
 .movie-detail {
     padding: 20px;
+    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     background-color: #242424;
     min-height: 100vh;
     color: #333;
+    box-sizing: border-box;
 }
 
 .movie-detail-container {
     display: grid;
-    grid-template-columns: 300px 1fr 350px;
+    grid-template-columns: minmax(250px, 300px) 1fr minmax(300px, 350px);
     gap: 30px;
     align-items: start;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+@media (max-width: 1200px) {
+    .movie-detail-container {
+        grid-template-columns: 250px 1fr 300px;
+        gap: 20px;
+    }
+}
 
+@media (max-width: 900px) {
+    .movie-detail-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
 
 .movie-poster-section {
     display: flex;
@@ -27,18 +43,16 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    aspect-ratio: 2/3;
+    background-color: #333;
 }
 
-.poster-placeholder {
+.poster-img {
     width: 100%;
-    height: 450px;
-    background: linear-gradient(135deg, #646cff 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .favorite-btn-detail {
@@ -51,13 +65,11 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    margin-top: 15px;
 }
 
 .favorite-btn-detail:hover {
     opacity: 0.6;
 }
-
 
 .movie-info-section {
     display: flex;
@@ -81,6 +93,7 @@
     padding-bottom: 5px;
 
 }
+
 .rating-section h3,
 .reviews-section h3 {
     color: black;
@@ -103,20 +116,56 @@
 .recommended-movies {
     display: flex;
     gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
 }
 
 .recommended-card {
     width: 120px;
-    height: 180px;
-    background: #ddd;
+    background: #333;
     border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.recommended-card:hover {
+    transform: scale(1.05);
+}
+
+.recommended-poster {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.recommended-placeholder {
+    width: 100%;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
+    color: #999;
     font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    background: #ddd;
 }
 
+.recommended-title {
+    padding: 8px;
+    font-size: 0.85rem;
+    color: white;
+    text-align: center;
+    background: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .movie-review-section {
     display: flex;
@@ -167,6 +216,7 @@
     color: #666;
     font-style: italic;
 }
+
 .watchlist-btn-detail{
     width: 100%;
     padding: 12px;
@@ -177,7 +227,6 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    margin-top: 15px;
 }
 
 .watchlist-btn-detail:hover {

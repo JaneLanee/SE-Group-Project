@@ -1,39 +1,104 @@
-import MovieCard from "../components/MovieCard"
-import {useState} from "react"
-import "../css/Home.css"
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import MovieCard from "../components/MovieCard";
+import "../css/Home.css";
 
-function Home() {
-    const[searchQuery, setSearchQuery] = useState("");
+const API_KEY = "51cd4d4953ec1657016f07763c6b902a";
 
-    const movies = [
-        {id: 1, title: "Random Movie 1", release_date: "2021"},
-        {id: 2, title: "Random Movie 2", release_date: "2022"},
-        {id: 3, title: "Random Movie 3", release_date: "2023"},
-    ];
+export default function Home() {
+  const [movies, setMovies] = useState([]);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [query, setQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const location = useLocation();
 
-    const handleSearch = (e) => {
-        e.preventDefault()
-        alert(searchQuery)
+  useEffect(() => {
+    setIsSearching(false);
+    setQuery("");
+    
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)
+      .then(res => res.json())
+      .then(data => setMovies(data.results || []))
+      .catch(err => console.error("Fetch error:", err));
+
+  }, [location]);
+
+  function handleSearch(e) {
+    e.preventDefault();
+    if (!query.trim()) {
+      setIsSearching(false);
+      fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)
+        .then(res => res.json())
+        .then(data => setMovies(data.results || []))
+        .catch(err => console.error("Fetch error:", err));
+      return;
     }
 
-    return <div className="home">
-        <form onSubmit={handleSearch} className="search-form">
-            <input
-                type="text"
-                placeholder="Search for movies..."
-                className="search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" className="search-button">Search</button>
-        </form>
+    setIsSearching(true);
+    fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`
+    )
+      .then(res => res.json())
+      .then(data => setMovies(data.results || []))
+      .catch(err => console.error("Search error:", err));
+  }
 
-        <div className="movies-grid">
-            {movies.map((movie) => (
-                movie.title.toLowerCase().startsWith(searchQuery.toLowerCase()) && <MovieCard movie={movie} key={movie.id} />
-            ))}
+  return (
+    <div className="home">
+      <form className="search-form" onSubmit={handleSearch}>
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Search movies..."
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
+        <button className="search-button">Search</button>
+      </form>
+
+      {!isSearching && (
+        <div className="movie-row-container">
+          <h2 className="row-title">Recommended For You</h2>
+          <div className="movie-row">
+            {recommendedMovies.length > 0 ? (
+              recommendedMovies.map(movie => (
+                <MovieCard
+                  key={movie.id}
+                  movie={{
+                    id: movie.id,
+                    title: movie.title,
+                    release_date: movie.release_date,
+                    url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                  }}
+                />
+              ))
+            ) : (
+              <p className="empty-message">No recommendations yet. Start reviewing movies to get personalized suggestions!</p>
+            )}
+          </div>
         </div>
-    </div>
-}
+      )}
 
-export default Home
+      <div className="movie-row-container">
+        <h2 className="row-title">{isSearching ? "Search Results" : "Popular Movies"}</h2>
+        <div className="movie-row">
+          {movies.length > 0 ? (
+            movies.map(movie => (
+              <MovieCard
+                key={movie.id}
+                movie={{
+                  id: movie.id,
+                  title: movie.title,
+                  release_date: movie.release_date,
+                  url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                }}
+              />
+            ))
+          ) : (
+            <p className="empty-message">No movies found.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
