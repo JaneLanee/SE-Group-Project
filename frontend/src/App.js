@@ -7,6 +7,8 @@ import WriteReview from "./pages/WriteReview";
 import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import UserPage from "./pages/UserPage";
+import UserSettings from "./pages/UserSettings";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/movie/:id/review" element={<WriteReview />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<UserPage />} />
+            <Route path="/settings" element={<UserSettings />} />
           </Routes>
         </main>
       </div>
@@ -29,4 +33,3 @@ function App() {
 }
 
 export default App;
-

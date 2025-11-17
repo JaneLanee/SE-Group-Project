@@ -1,146 +1,143 @@
 .user-page {
-  padding: 40px;
-  max-width: 1400px;
-  margin: 0 auto;
-  background-color: #242424;
   min-height: 100vh;
-  color: #333;
+  background: #1a1a1a;
+  padding: 2rem;
 }
 
 .user-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 350px 1fr;
-  gap: 80px;
-  align-items: start;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
 }
 
 .user-info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 2rem;
+  height: fit-content;
 }
 
 .profile-picture-placeholder {
-  width: 350px;
-  height: 350px;
-  background-color: rgb(186, 181, 181);
+  width: 200px;
+  height: 200px;
+  background: #3a3a3a;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgb(67, 61, 61);
-  font-size: 28px;
-  font-weight: bold;
+  margin: 0 auto 1.5rem;
+  color: #999;
+}
+
+.profile-description {
+  text-align: center;
 }
 
 .profile-description h2 {
-  color: white;
-  margin-bottom: 15px;
-  font-size: 1.3rem;
-  border-bottom: 2px solid #646cff;
-  padding-bottom: 5px;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
 }
 
 .profile-description p {
-  line-height: 15;
-  color: #666;
-  font-size: 1.1rem;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: #999;
+  font-size: 0.9rem;
 }
 
 .profile-info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 2rem;
 }
 
 .user-heading {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 60px;
-  font-size: 2.5rem;
-  color: white;
-  margin: 0;
-  font-weight: bold;
-  border-bottom: 2px solid #646cff;
-  padding-bottom: 20px;
+  border-bottom: 1px solid #3a3a3a;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.user-heading h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-heading h2 {
+  color: #999;
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0.25rem 0;
 }
 
 .settings-button {
-  width: 30%;
-  padding: 12px;
-  background: #646cff;
+  background: #ef4444;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
+  margin-top: 1rem;
 }
+
 .settings-button:hover {
-  opacity: 0.6;
+  background: #dc2626;
 }
 
 .user-activity {
-  display: flex;
-  gap: 30px;
+  margin-bottom: 2rem;
 }
 
-.your-watchlist-title {
-  color: white;
-  font-size: 12px;
-  display: flex;
+.your-watchlist-title h3 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.view-favorites-button {
-  width: 30%;
-  padding: 12px;
-  background: #646cff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  display: flex;
-}
-.view-favorites-button:hover {
-  opacity: 0.6;
-}
-
+.view-favorites-button,
 .view-reviews-button {
-  width: 30%;
-  padding: 12px;
-  background: #646cff;
+  background: #3a3a3a;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  display: flex;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
 }
+
+.view-favorites-button:hover,
 .view-reviews-button:hover {
-  opacity: 0.6;
+  background: #4a4a4a;
 }
 
 .user-watchlist {
-  display: flex;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
 }
 
 .watchlist-card {
-  width: 120px;
-  height: 180px;
-  background: #ddd;
+  background: #3a3a3a;
   border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+  min-height: 200px;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  color: #666;
-  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .user-page-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-watchlist {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 }

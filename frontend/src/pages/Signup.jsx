@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Signup.css";
 
+// Signup page - handles new user registration
 function Signup() {
+  // Form input states
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +12,7 @@ function Signup() {
   const [dob, setDob] = useState("");
   const navigate = useNavigate();
 
-  //Handles signup form submission
+  // Handles signup form submission - validates passwords and creates account
   const submitSignup = (e) => {
     e.preventDefault();
 
@@ -24,6 +26,7 @@ function Signup() {
       return;
     }
 
+    // TODO: Send signup data to backend
     alert("Signup feature coming soon!");
   };
 

@@ -1,16 +1,18 @@
-import "./UserSettings.css";
+import "../css/UserSettings.css";
 
+// User settings page - allows users to edit profile picture, bio, and manage watchlist
 function UserSettings() {
   return (
     <div className="user-page">
       <div className="user-page-container">
+        
+        {/* Left sidebar - profile picture and bio editing */}
         <div className="user-info-section">
           <div className="profile-picture-placeholder">
             <span>Profile Picture</span>
           </div>
           <button className="edit-profile-picture">
-            {" "}
-            Edit Profile Picture{" "}
+            Edit Profile Picture
           </button>
           <div className="profile-description">
             <h2> BIO </h2>
@@ -19,16 +21,21 @@ function UserSettings() {
           </div>
         </div>
 
+        {/* Main content - user info, settings options, and watchlist */}
         <div className="profile-info-section">
           <div className="user-heading">
             <h1> USER NAME </h1>
             <h2> 20 FOLLOWERS </h2>
             <h2> 20 FOLLOWING </h2>
           </div>
+          
+          {/* Profile editing options */}
           <div className="editing-options">
             <h3> Profile Settings </h3>
             <button className="edit-user-button">Edit Profile</button>
           </div>
+          
+          {/* User's watchlist display */}
           <div className="user-watchlist">
             <div className="watchlist-card">Movie 1</div>
             <div className="watchlist-card">Movie 2</div>
