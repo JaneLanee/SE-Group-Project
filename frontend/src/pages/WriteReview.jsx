@@ -6,12 +6,12 @@ function WriteReview() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Track rating selection and hover state for interactive stars
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
-  //Handles review form submission
-  //Validates rating, preps review data, and goes back to movie detail
+  // Handles review form submission - validates rating and navigates back to movie detail
   const submitReview = (e) => {
     e.preventDefault();
 
@@ -26,6 +26,7 @@ function WriteReview() {
       text: reviewText,
     };
 
+    // TODO: Send reviewData to backend
     alert("Review submitted!");
     navigate(`/movie/${id}`);
   };
@@ -36,6 +37,7 @@ function WriteReview() {
 
         <h1 className="review-title">Write a Review</h1>
 
+        {/* Interactive star rating system */}
         <div className="review-rating-section">
           <h3>Select Rating</h3>
           <div className="interactive-stars">

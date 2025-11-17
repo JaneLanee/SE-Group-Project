@@ -1,9 +1,15 @@
-import "./UserPage.css";
+import { useNavigate } from "react-router-dom";
+import "../css/UserPage.css";
 
+// User profile page - displays user info, watchlist, and activity options
 function UserPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="user-page">
       <div className="user-page-container">
+        
+        {/* Left sidebar - profile picture and bio */}
         <div className="user-info-section">
           <div className="profile-picture-placeholder">
             <span>Profile Picture</span>
@@ -14,13 +20,21 @@ function UserPage() {
           </div>
         </div>
 
+        {/* Main content - user info, activity buttons, and watchlist */}
         <div className="profile-info-section">
           <div className="user-heading">
             <h1> USER NAME </h1>
             <h2> 20 FOLLOWERS </h2>
             <h2> 20 FOLLOWING </h2>
-            <button className="settings-button">Profile Settings</button>
+            <button 
+              className="settings-button"
+              onClick={() => navigate("/settings")}
+            >
+              Profile Settings
+            </button>
           </div>
+          
+          {/* Activity section with navigation to favorites and reviews */}
           <div className="user-activity">
             <div className="your-watchlist-title">
               <h3> YOUR WATCHLIST </h3>
@@ -30,6 +44,8 @@ function UserPage() {
             </button>
             <button className="view-reviews-button">View Your Reviews</button>
           </div>
+          
+          {/* User's watchlist display */}
           <div className="user-watchlist">
             <div className="watchlist-card">Movie 1</div>
             <div className="watchlist-card">Movie 2</div>
