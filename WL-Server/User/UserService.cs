@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+
 namespace WL_Server.User;
 
 
@@ -7,10 +10,12 @@ public class UserService : IUserService
 {
     //GET USER REPOSITORY
     private IUserRepository _userRepository;
+    private IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public bool SignUp(User input)
@@ -38,6 +43,7 @@ public class UserService : IUserService
                 Console.WriteLine(input.username + " about to create ...");
                 _userRepository.Create(input);
                 //STORE SESSION / AUTHENTICATE
+                SetSession(input.ID);
             }
             catch //IN CASE OF ERROR
             {
@@ -64,9 +70,9 @@ public class UserService : IUserService
             if (user.PwHash == checkUserByEmail.PwHash)
             {
                 //LOGIN USER
-                return true;
-                
                 //STORE SESSION / AUTHENTICATE
+                SetSession(checkUserByUsername.ID);
+                return true;
             } else //WRONG PASSWORD
             {
                 return false;
@@ -78,9 +84,9 @@ public class UserService : IUserService
             if (user.PwHash == checkUserByUsername.PwHash)
             {
                 //LOGIN USER
-                return true;
-                
                 //STORE SESSION / AUTHENTICATE
+                SetSession(checkUserByUsername.ID);
+                return true;
             }
         }
         else //USER LOGIN FAILED
@@ -91,15 +97,21 @@ public class UserService : IUserService
 
         return false;
     }
-
-    //test ignore
-    public User TestGrab(User input)
+    
+    //HASH PASSWORD
+    public string HashPassword(string password)
     {
-        input.username = "test";
+
+        byte[] salt = new byte[16];
+        salt = RandomNumberGenerator.GetBytes(128 / 8);
+        string hashedPW = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 10000,
+            numBytesRequested:256 / 8));
         
-        
-        var result = _userRepository.GetByUsername(input);
-        return result;
+        return hashedPW;
     }
     
     //FETCH USER INFO BY USERNAME
@@ -117,5 +129,41 @@ public class UserService : IUserService
         }
 
         return null;
+    }
+
+    //STORE INFO INTO SESSION FOR AUTHENTICATION/AUTHORIZATION
+    public void SetSession(int userId)
+    {
+
+        string sessionId = "";
+
+        //STORE INFO FOR SESSIONS
+        //USED FOR USER AUTH
+        _httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId);
+
+        Guid uuid = new Guid();
+        string sessionKey = uuid.ToString();
+        
+        //STORE SESSION IN DATABASE
+        _httpContextAccessor.HttpContext.Session.SetString("SessionKey", sessionKey);
+
+        _userRepository.StoreSession(userId, sessionId, DateTime.Now);
+
+    }
+
+    //CHECK SESSION DATA TO SEE IF USER IS LOGGED IN
+    public bool GetSession()
+    {
+        //CHECK IS USER IS LOGGED IN SESSION
+        var loggedUser = _httpContextAccessor.HttpContext.Session.GetString("SessionKey");
+
+        if (loggedUser != null)
+        {
+            Console.WriteLine("User login required");
+            return false;
+        }
+
+        return true;
+
     }
 }

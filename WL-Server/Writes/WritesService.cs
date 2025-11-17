@@ -1,42 +1,100 @@
+using WL_Server.Watchlist;
+
 namespace WL_Server.Writes;
 
-public class WritesService
+public class WritesService : IWritesService
 {
-    public Writes FetchWritesByMovieId(Writes writes)
+    // IMPLEMENT WRITES REPOSITORY TO INCORPORATE DB LOGIC
+    private readonly IWritesRepository _writesRepository;
+    private readonly IWatchlistRepository _watchlistRepository;
+
+    public WritesService(IWritesRepository writesRepository, IWatchlistRepository watchlistRepository)
     {
-        //LOGIC
-        return writes;
+        _writesRepository = writesRepository;
+        _watchlistRepository = watchlistRepository;
+    }
+    
+    // GRAB WRITES FOR MOVIE
+    public Writes[] FetchWritesByMovieId(Writes writes)
+    {
+        
+        // GRAB FETCH METHOD FROM WRITES REPOSITORY
+        // CHECK TO SEE IF WRITES EXISTS
+        var writesList = _writesRepository.GetWritesByMovieId(writes);
+
+        
+        if (writesList.Length == 0)
+        {
+            //EMPTY, RETURN NULL
+            return null;
+        }
+
+        //RETURN WRITES LISTS
+        return writesList;
     }
 
-    public Writes FetchWritesByUserId(Writes writes)
+    // GRAB WRITES FOR USER
+    public Writes[] FetchWritesByUserId(Writes writes)
     {
-        //LOGIC
-        return writes;
+        // GRAB FETCH METHOD FROM WRITES REPOSITORY
+        // CHECK TO SEE IF WRITES EXISTS
+        var writesList = _writesRepository.GetWritesByUserId(writes);
+
+        
+        if (writesList.Length == 0)
+        {
+            //EMPTY, RETURN NULL
+            return null;
+        }
+
+        //RETURN WRITES LISTS
+        return writesList;
     }
 
-    public Writes FetchAllWrites(Writes writes)
+    // GRAB ALL WRITES
+    public Writes[] FetchAllWrites()
     {
-        //LOGIC
-        return writes;
+        // GRAB FETCH METHOD FROM WRITES REPOSITORY
+        // CHECK TO SEE IF WRITES EXISTS
+        var writesList = _writesRepository.GetWrites();
+
+        
+        if (writesList.Length == 0)
+        {
+            //EMPTY, RETURN NULL
+            return null;
+        }
+
+        //RETURN WRITES LISTS
+        return writesList;
     }
 
-    public void CreateWrites(Writes writes)
+    // CREATE A WRITES FOR MOVIE
+    public bool CreateWrites(Writes writes)
     {
-        //LOGIC
+        if (writes.UserId == null)
+        {
+            return false;
+        }
+        
+        //CREATE WRITES
+        _writesRepository.Create(writes);
+        return true;
+
+    }
+    
+    // INCREASE UPVOTE COUNTER
+    public bool Upvote(Writes writes)
+    {
+        //GRAB WRITES
+        return _writesRepository.UpdateUpvoteCounter(writes);
     }
 
-    public void UpdateRating(Writes writes)
+    // DELETE WRITES
+    public bool DeleteWrites(Writes writes)
     {
-        //LOGIC
-    }
-
-    public void Upvote(Writes writes)
-    {
-        //LOGIC
-    }
-
-    public void DeleteWrites(Writes writes)
-    {
-        //LOGIC
+        //DELETE WRITES
+        //_writesRepository.Delete(writes);
+        return _writesRepository.Delete(writes);
     }
 }

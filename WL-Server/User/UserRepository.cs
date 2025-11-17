@@ -169,13 +169,38 @@ public class UserRepository : IUserRepository
         db.Close();
     }
 
-    public void Update(User user)
+    public bool StoreSession(int userId, string sessionId, DateTime createdAt)
     {
-        //UPDATE LOGIC
-    }
+        //INITIALIZE CONNECTION
+        var db = new DBConn();
 
-    public void Delete(User user)
-    {
-        //DELETE LOGIC
+        //CHECK FOR CONNECTION
+        if (db.IsConnected())
+        {
+            try
+            {
+                //QUERY TO STORE SESSION
+                string query =
+                    "INSERT INTO Sessions (User_ID, token_hash, created_at) VALUES (@userId, @tokenHash, @createdAt)";
+
+                var cmd = new MySqlCommand(query, db.Conn);
+
+                //ASSIGN VALUES FROM QUERY STRING
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@tokenHash", sessionId);
+                cmd.Parameters.AddWithValue("@createdAt", createdAt);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (MySqlException ex) // IN CASE OF ERROR
+            {
+                //LOG ERROR
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        //
+        db.Close();
+        return true;
     }
 }

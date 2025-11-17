@@ -6,7 +6,10 @@ public interface IUserService
 
     public bool Login(User user);
 
-    public User TestGrab(User user);
+    public string HashPassword(string password);
 
     public User FetchUserByUsername(string username);
+
+    public void SetSession(int userId);
+    public bool GetSession();
 }

@@ -11,8 +11,6 @@ public interface IUserRepository
     void GetAll(User entity);
     
     void Create(User entity);
-    
-    void Update(User entity);
-    
-    void Delete(User entity);
+
+    bool StoreSession(int userId, string sessionId, DateTime createdAt);
 }

@@ -17,16 +17,6 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-
-    [HttpPost("testuser")]
-    public IActionResult TestGetUser([FromBody] User input)
-    {
-        Console.WriteLine(input.PwHash + " pain");
-        var result = _userService.TestGrab(input);
-        Console.WriteLine(result.PwHash + "pain 2");
-        return Ok(result);
-    }
-    
     
     //USER SIGNUP
     [HttpPost("signup")] // https://localhost:5210/api/user/signup

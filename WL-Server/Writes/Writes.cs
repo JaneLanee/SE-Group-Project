@@ -15,6 +15,9 @@ public class Writes
     //WRITES comment text
     public string? Comment { get; set; }
     
+    //WRITES Date_posted DATE
+    public DateTime? DatePosted { get; set; }
+    
     //WRITES upvote_count int
     public int? UpvoteCount { get; set; } = 0;
 }
