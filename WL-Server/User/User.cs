@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace WL_Server.User;
 using System;
 using System.Collections.Generic;
@@ -14,13 +16,13 @@ public class User
     //User ID UUID INT NOT NULL
     public int ID { get; set; }
     //User email  STRING NOT NULL
-    public string? email { get; set; }
+    public string? Email { get; set; }
     //User username STRING NOT NULL
-    public string? username { get; set; }
+    public string? Username { get; set; }
     //User password STRING NOT NULL
-    public string? PwHash { get; set; }
+    public string? Password { get; set; }
     //User dateOfBirth DATE
-    public DateTime? dateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
     
     
 }

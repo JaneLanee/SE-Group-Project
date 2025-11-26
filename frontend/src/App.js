@@ -5,7 +5,7 @@ import Favorites from "./pages/Favorites";
 import MovieDetail from "./pages/MovieDetail";
 import WriteReview from "./pages/WriteReview";
 import NavBar from "./components/NavBar";
-import Login from "./pages/Login";
+import Loginv2 from "./pages/Loginv2";
 import Signup from "./pages/Signup";
 import UserPage from "./pages/UserPage";
 import UserSettings from "./pages/UserSettings";
@@ -21,7 +21,7 @@ function App() {
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
             <Route path="/movie/:id/review" element={<WriteReview />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Loginv2 />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<UserPage />} />
             <Route path="/settings" element={<UserSettings />} />

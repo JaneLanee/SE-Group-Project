@@ -36,9 +36,9 @@ public class UserRepository : IUserRepository
             {
 
                 result.ID = myReader.GetInt32("User_Id");
-                result.username = myReader.GetString("Username");
-                result.email = myReader.GetString("Email");
-                result.PwHash = myReader.GetString("Password_hash");
+                result.Username = myReader.GetString("Username");
+                result.Email = myReader.GetString("Email");
+                result.Password = myReader.GetString("Password_hash");
             }
 
         }
@@ -63,7 +63,7 @@ public class UserRepository : IUserRepository
             
             string query = "SELECT * FROM Users WHERE Username = @username";
             var cmd = new MySqlCommand(query, db.Conn);
-            cmd.Parameters.AddWithValue("@username", user.username);
+            cmd.Parameters.AddWithValue("@username", user.Username);
             
             //DISPLAY RESULTS
             using var myReader = cmd.ExecuteReader();
@@ -73,9 +73,9 @@ public class UserRepository : IUserRepository
             {
 
                 result.ID = myReader.GetInt32("User_Id");
-                result.username = myReader.GetString("Username");
-                result.email = myReader.GetString("Email");
-                result.PwHash = myReader.GetString("Password_hash");
+                result.Username = myReader.GetString("Username");
+                result.Email = myReader.GetString("Email");
+                result.Password = myReader.GetString("Password_hash");
             }
 
         }
@@ -96,7 +96,7 @@ public class UserRepository : IUserRepository
             //GET BY ID SQL QUERY
             string query = "SELECT * FROM Users WHERE Email = @email";
             var cmd = new MySqlCommand(query, db.Conn);
-            cmd.Parameters.AddWithValue("@email", user.email);
+            cmd.Parameters.AddWithValue("@email", user.Email);
             
             //DISPLAY RESULTS
             using var myReader = cmd.ExecuteReader();
@@ -106,9 +106,9 @@ public class UserRepository : IUserRepository
             {
 
                 result.ID = myReader.GetInt32("User_Id");
-                result.username = myReader.GetString("Username");
-                result.email = myReader.GetString("Email");
-                result.PwHash = myReader.GetString("Password_hash");
+                result.Username = myReader.GetString("Username");
+                result.Email = myReader.GetString("Email");
+                result.Password = myReader.GetString("Password_hash");
             }
 
         }
@@ -153,10 +153,10 @@ public class UserRepository : IUserRepository
                 string query =
                     "INSERT INTO Users (Username, Email, Password_hash, DoB) VALUES (@username, @email, @password, @dateOfBirth)";
                 var cmd = new MySqlCommand(query, db.Conn);
-                cmd.Parameters.AddWithValue("?username", user.username);
-                cmd.Parameters.AddWithValue("?email", user.email);
-                cmd.Parameters.AddWithValue("?password", user.PwHash);
-                cmd.Parameters.AddWithValue("?dateOfBirth", user.dateOfBirth);
+                cmd.Parameters.AddWithValue("?username", user.Username);
+                cmd.Parameters.AddWithValue("?email", user.Email);
+                cmd.Parameters.AddWithValue("?password", user.Password);
+                cmd.Parameters.AddWithValue("?dateOfBirth", user.DateOfBirth);
 
                 cmd.ExecuteNonQuery();
             }

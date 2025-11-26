@@ -25,6 +25,17 @@ export default function Home() {
 
   }, [location]);
 
+  useEffect(() => {
+    async function loadRecommendations() {
+      const res = await fetch(
+          `https://api.themoviedb.org/3/movie/37799/recommendations?api_key=${API_KEY}`
+      );
+      const data = await res.json();
+      setRecommendedMovies(data.results || []);
+  }
+  loadRecommendations();
+  }, [location])
+
   //Handles movie search submission
   //If query is empty it resets to popular movies. Otherwise searches API
   function handleSearch(e) {

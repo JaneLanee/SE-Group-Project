@@ -6,7 +6,7 @@ public interface IWatchlistService
 
     public Watchlist GetMovieFromWatchlist(Watchlist watchlist);
 
-    public bool AddToWatchlist(Watchlist watchlist);
+    public bool AddToWatchlist(Watchlist watchlist, string movieTitle);
 
     public bool UpdateStatus(Watchlist watchlist);
 

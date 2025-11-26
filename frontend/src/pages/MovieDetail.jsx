@@ -2,6 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../css/MovieDetail.css";
 
+import axios from "axios";
+
 const API_KEY = "51cd4d4953ec1657016f07763c6b902a";
 
 function MovieDetail() {
@@ -10,6 +12,8 @@ function MovieDetail() {
 
     const [movie, setMovie] = useState(null);
     const [recommendations, setRecommendations] = useState([]);
+    const [user, setUser] = useState({});
+    const [writes, setWrites] = useState([]);
 
     // fetch movie details from API
     // TODO: fetch recommended movies from backend, right now just blank recommendation fetch for API
@@ -34,6 +38,47 @@ function MovieDetail() {
         loadRecommendations();
     }, [id]);
 
+    useEffect(() => {
+        //FETCH LOGGED IN USER INFO
+        axios.get("http://localhost:5210/api/user/loggedUser", {withCredentials: true, headers: {'Content-Type': 'application/json'}})
+        .then(res => setUser(res.data))
+        .catch(err => console.log(err))
+    },[])
+
+    console.log(parseInt(user.userId));
+    console.log(movie)
+
+    const addMovieToWatchlist = () => {
+
+        var userInt = parseInt(user.UserId)
+
+        var watchlistData = {
+            UserId: userInt,
+            MovieId: movie.id,
+            MovieTitle: movie.title
+        }
+
+        axios.post("http://localhost:5210/api/watchlist/add", watchlistData, {withCredentials: true})
+        .then(res => console.log(res))
+        .catch(err => console.log(err)
+        )
+    }
+
+    //
+    useEffect(() => {
+
+        const movieWritesData = {
+            movieId: id
+        }
+
+        axios.get(`http://localhost:5210/api/writes/${id}`, {withCredentials: true})
+        .then(res => {setWrites(res.data)})
+        .catch(err => {console.log(err)})
+
+    }, [id])
+
+    console.log(writes);
+
     //Converts 0-10 rating to 5-star scale and display
     const renderStars = (rating) => {
         const stars = [];
@@ -56,6 +101,7 @@ function MovieDetail() {
         return <p style={{ color: "white", textAlign: "center" }}>Loading...</p>;
     }
 
+
     return (
         <div className="movie-detail">
             <div className="movie-detail-container">
@@ -71,7 +117,7 @@ function MovieDetail() {
                     <button className="favorite-btn-detail">
                         ♡ Favorite
                         </button>
-                    <button className="watchlist-btn-detail">
+                    <button onClick={addMovieToWatchlist} className="watchlist-btn-detail">
                         📑 Add to Watchlist
                     </button>
                 </div>
@@ -139,7 +185,11 @@ function MovieDetail() {
                     <div className="reviews-section">
                         <h3>REVIEWS</h3>
                         <div className="reviews-list">
-                            <p>No reviews yet</p>
+                            {writes.length != 0 ? writes.map(write => (
+                                <div>
+                                    <p>{write.comment}</p>
+                                </div>
+                            )) : <p>No reviews yet</p>}
                         </div>
                     </div>
 

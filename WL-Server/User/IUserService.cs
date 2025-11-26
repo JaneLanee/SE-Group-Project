@@ -2,9 +2,9 @@ namespace WL_Server.User;
 
 public interface IUserService
 {
-    public bool SignUp(User user);
+    public User SignUp(User user);
 
-    public bool Login(User user);
+    public User Login(User user);
 
     public string HashPassword(string password);
 

@@ -6,10 +6,10 @@ namespace WL_Server.Writes;
 
 public class WritesRepository : IWritesRepository
 {
-    public Writes[] GetWritesByMovieId(Writes writes)
+    public List<Writes> GetWritesByMovieId(Writes writes)
     {
         // INITIALIZE RESULTS
-        Writes[] result = new Writes[50];
+        var result = new List<Writes>();
         int count = 0;
         
         //INITIALIZE CONNECTION FOR DB LOGIC
@@ -20,6 +20,7 @@ public class WritesRepository : IWritesRepository
         {
             try
             {
+                Console.WriteLine(writes.MovieId);
                 //INITIALIZE SQL COMMAND IN ORDER TO MAKE QUERY
                 // GET BY ID SQL QUERY
                 string query = "SELECT * FROM Writes WHERE Movie_Id = @movieId";
@@ -32,14 +33,17 @@ public class WritesRepository : IWritesRepository
                 // STORE RESULTS
                 while (myReader.Read())
                 {
-                    result[count].UserId = myReader.GetInt32("User_Id");
-                    result[count].MovieId = myReader.GetInt32("Movie_Id");
-                    result[count].Rating = myReader.GetFloat("rating");
-                    result[count].Comment = myReader.GetString("comment");
-                    result[count].DatePosted = myReader.GetDateTime("date_posted");
-                    result[count].UpvoteCount = myReader.GetInt32("upvote_count");
-
-                    count++;
+                    var write = new Writes
+                    {
+                        UserId = myReader.GetInt32("User_Id"),
+                        MovieId = myReader.GetInt32("Movie_Id"),
+                        Rating = myReader.GetFloat("rating"),
+                        Comment = myReader.GetString("comment"),
+                        DatePosted = myReader.GetDateTime("date_posted"),
+                        UpvoteCount = myReader.GetInt32("upvote_count")
+                    };
+                
+                    result.Add(write);
 
                 }
             }
@@ -157,7 +161,7 @@ public class WritesRepository : IWritesRepository
             {
                 // QUERY TO CREATE WRITES
                 string query =
-                    "INSERT INTO Writes (User_ID, Movie_Id, rating, comment, date_posted, upvote_count) VALUES (@userId, movieId, @rating, @comment, @datePosted, @upvoteCount)";
+                    "INSERT INTO Writes (User_Id, Movie_Id, rating, comment, date_posted, upvote_count) VALUES (@userId, @movieId, @rating, @comment, @datePosted, @upvoteCount)";
                 var cmd = new MySqlCommand(query, db.Conn);
 
                 //ASSIGN VALUES IN QUERY
@@ -248,6 +252,69 @@ public class WritesRepository : IWritesRepository
             }
         }
         // CLOSE DB AND RETURN TRUE
+        db.Close();
+        return true;
+    }
+    
+    public int GetMovieById(int movieId)
+    {
+        //INITIALIZE RESULT INFO
+        int foundMovieId = 0;
+        //INITIALIZE CONNECTION FOR DB LOGIC
+        var db = new DBConn();
+        if (db.IsConnected())
+        {
+            try
+            {
+                string query = "SELECT * FROM Movies WHERE Movie_Id = @movieId";
+
+                var cmd = new MySqlCommand(query, db.Conn);
+
+                cmd.Parameters.AddWithValue("@movieId", movieId);
+
+                using var myReader = cmd.ExecuteReader();
+
+                while (myReader.Read())
+                {
+                    foundMovieId = myReader.GetInt32("Movie_Id");
+                }
+                Console.WriteLine("foundMovieId: " + foundMovieId);
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        db.Close();
+        return foundMovieId;
+    }
+
+    public bool AddMovie(int movieId, string movieTitle)
+    {
+        //INITIALIZE CONNECTION FOR DB LOGIC
+        var db = new DBConn();
+        if (db.IsConnected())
+        {
+            try
+            {
+                string query = "INSERT INTO Movies (Movie_Id, title) VALUES (@movieId, @movieTitle)";
+                
+                var cmd = new MySqlCommand(query, db.Conn);
+                
+                cmd.Parameters.AddWithValue("@movieId", movieId);
+                cmd.Parameters.AddWithValue("@movieTitle", movieTitle);
+                
+                cmd.ExecuteNonQuery();
+                
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
         db.Close();
         return true;
     }

@@ -1,7 +1,18 @@
+using System.Net;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WL_Server.Watchlist;
 
+public class WatchlistDTO
+{
+    public int? UserId { get; set; }
+    public int? MovieId { get; set; }
+    public string? MovieTitle { get; set; }
+}
+
+//[Authorize(Policy = "UserOnly")]
 [ApiController]
 [Route("api/[controller]")] //  https://localhost:5210/api/watchlist
 public class WatchlistController : ControllerBase
@@ -15,23 +26,24 @@ public class WatchlistController : ControllerBase
     }
 
     // FETCH THE USERS WATCHLIST
-    [HttpGet("{userId}")] // https://localhost:5210/api/watchlist/{userID}
-    public IActionResult GetWatchlist([FromQuery]int userId)
+    [HttpGet("userwatchlist")] // https://localhost:5210/api/watchlist/{userID}
+    public IActionResult GetWatchlist()
     {
 
         // STORE USERID FROM QUERY
         var input = new Watchlist();
-        input.UserId = userId;
-
+        input.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        Console.WriteLine(input.UserId);
+        
         try
         {
             // CALL TO REPOSITORY TO GRAB USER WATCHLIST
             var watchlist = _watchlistService.GetUserWatchlist(input);
             return Ok(watchlist);
         }
-        catch // IN CASE OF ERROR
+        catch(Exception e) // IN CASE OF ERROR
         {
-            return Ok("Error");
+            return Ok(e.Message);
         }
     }
     
@@ -57,26 +69,35 @@ public class WatchlistController : ControllerBase
     }
     
     // POST REQUEST TO ADD A MOVIE TO USERS WATCHLIST
-    [HttpPost("{userId}/{movieId}/add")] // https://localhost:5210/api/watchlist/{userID}/{movieID}/add
-    public IActionResult AddToWatchlist([FromQuery] int userId, [FromRoute] int movieId, [FromBody] float rating)
+    [HttpPost("add")] // https://localhost:5210/api/watchlist/{userID}/{movieID}/add
+    public IActionResult AddToWatchlist([FromBody] WatchlistDTO input)
     {
-        var input = new Watchlist();
-        input.UserId = userId;
-        input.MovieId = movieId;
-        input.DateAdded = DateTime.UtcNow;
-        input.PersonalRating = rating;
 
-        try
-        {
-            //ADD MOVIE TO USER WATCHLIST
-            _watchlistService.AddToWatchlist(input);
-            return Ok("Success");
+        var watchlist = new Watchlist();
+        input.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        watchlist.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        Console.WriteLine(watchlist.UserId);
+        watchlist.MovieId = input.MovieId;
+        watchlist.DateAdded = DateTime.Now;
 
-        }
-        catch
+        if (HttpContext.User.Identity.IsAuthenticated)
         {
-            return Ok("Error");
+            try
+            {
+                //ADD MOVIE TO USER WATCHLIST
+                _watchlistService.AddToWatchlist(watchlist, input.MovieTitle);
+                return Ok("Success: Added movie to watchlist");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Ok("Error");
+            }
         }
+
+        return BadRequest("Login required");
+
     }
 
     // PUT REQUEST TO UPDATE THE STATUS OF A MOVIE IN USER WATCHLIST

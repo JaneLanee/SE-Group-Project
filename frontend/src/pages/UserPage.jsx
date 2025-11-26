@@ -1,9 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import "../css/UserPage.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 // User profile page - displays user info, watchlist, and activity options
 function UserPage() {
   const navigate = useNavigate();
+
+  const [movies, setMovies] = useState([]);
+
+
+  useEffect(() => {
+    axios.get("http://localhost:5210/api/watchlist/userwatchlist", {withCredentials: true})
+    .then(res => {setMovies(res.data)})
+    .catch(err => {console.log(err)})
+  }, [])
+
+  console.log(movies);
 
   return (
     <div className="user-page">
@@ -52,6 +65,7 @@ function UserPage() {
             <div className="watchlist-card">Movie 3</div>
             <div className="watchlist-card">Movie 4</div>
             <div className="watchlist-card">Movie 5</div>
+            {}
           </div>
         </div>
       </div>

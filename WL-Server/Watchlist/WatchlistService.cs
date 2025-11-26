@@ -1,3 +1,5 @@
+using WL_Server.Recommend;
+
 namespace WL_Server.Watchlist;
 
 public class WatchlistService : IWatchlistService
@@ -13,6 +15,7 @@ public class WatchlistService : IWatchlistService
     //GRAB ALL MOVIES IN USERS WATCHLIST
     public Watchlist[] GetUserWatchlist(Watchlist watchlist)
     {
+        Console.WriteLine(watchlist.UserId + "getUserWatch method");
         //CHECK TO MAKE SURE WATCHLIST EXIST
         var userWatchlist = _watchlistRepository.GetWatchlist(watchlist);
 
@@ -23,6 +26,7 @@ public class WatchlistService : IWatchlistService
         }
 
         // RETURN AN ARRAY OF THE USERS WATCHLIST MOVIES
+        Console.WriteLine(userWatchlist[0].MovieId + "getUserWatch method");
         return userWatchlist;
     }
 
@@ -43,12 +47,27 @@ public class WatchlistService : IWatchlistService
     }
 
     //ADD MOVIE TO USER WATCHLIST
-    public bool AddToWatchlist(Watchlist watchlist)
+    public bool AddToWatchlist(Watchlist watchlist, string movieTitle)
     {
         //CREATE NEW 
         if (watchlist.UserId == null)
         {
+            Console.WriteLine("false");
             return false;
+        }
+        
+        //CHECK IF MOVIE EXISTS IN DB, IF NOT ADD IT INTO DB
+        int movieId = (int)watchlist.MovieId;
+        Console.WriteLine("checking ...");
+        var movieExists = _watchlistRepository.GetMovieById(movieId);
+
+        //var movieId = (int) watchlist.MovieId;
+
+        Console.WriteLine("Movie found: " + movieExists);
+        if (movieExists == 0)
+        {
+            Console.WriteLine("movie not found .. lets add");
+            _watchlistRepository.AddMovie(movieId, movieTitle);
         }
         
         //ADD MOVIE

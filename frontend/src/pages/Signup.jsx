@@ -2,8 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Signup.css";
 
+import axios from "axios";
+
 // Signup page - handles new user registration
 function Signup() {
+
+  //axios.defaults.withCredentials = true;
   // Form input states
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -26,8 +30,24 @@ function Signup() {
       return;
     }
 
+    var userData = {
+      username: username,
+      email: email,
+      password: password,
+      dateOfBirth: dob
+    }
+
     // TODO: Send signup data to backend
-    alert("Signup feature coming soon!");
+    axios.post("http://localhost:5210/api/user/signup", userData, {
+      withCredentials: true,
+      headers: {'Content-Type': 'application/json'}
+    }).then(res => {
+      console.log(res);
+      navigate('/');
+    }).catch( error => {
+      console.log(error);
+      navigate('/signup');
+    })
   };
 
   return (
@@ -52,6 +72,7 @@ function Signup() {
             <label>Email</label>
             <input
               type="email"
+              name="Email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -63,6 +84,7 @@ function Signup() {
             <label>Date of Birth</label>
             <input
               type="date"
+              name="DateOfBirth"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
               required
@@ -73,6 +95,7 @@ function Signup() {
             <label>Password</label>
             <input
               type="password"
+              name="Password"
               placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

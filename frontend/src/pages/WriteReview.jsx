@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/WriteReview.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+const API_KEY = "51cd4d4953ec1657016f07763c6b902a";
 
 function WriteReview() {
   const { id } = useParams();
@@ -10,6 +13,20 @@ function WriteReview() {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  const [movie, setMovie] = useState(null);
+
+  //
+  useEffect(() => {
+    async function loadMovie() {
+        const res = await fetch(
+            `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`
+        );
+        const data = await res.json();
+        setMovie(data);
+    }
+
+    loadMovie();
+}, [id]);
 
   // Handles review form submission - validates rating and navigates back to movie detail
   const submitReview = (e) => {
@@ -20,16 +37,37 @@ function WriteReview() {
       return;
     }
 
-    const reviewData = {
-      movieId: id,
-      rating,
-      text: reviewText,
-    };
+    var writesData = {
+      MovieId: id,
+      MovieTitle: movie.title,
+      Rating: rating,
+      Comment: reviewText
+  }
+
+  axios.post("http://localhost:5210/api/writes/add", writesData, {withCredentials: true})
+  .then(res => {console.log(res.data)})
+  .catch(err => {console.log(err)})
+
+    
 
     // TODO: Send reviewData to backend
     alert("Review submitted!");
     navigate(`/movie/${id}`);
   };
+
+//   const addUserWrites = () => {
+
+//     var writesData = {
+//         MovieId: id,
+//         Rating: rating,
+//         Comment: reviewText
+//     }
+
+//     axios.post("http://localhost:5210/api/writes/add", writesData, {withCredentials: true})
+//     .then(res => {console.log(res.data)})
+//     .catch(err => {console.log(err)})
+
+// }
 
   return (
     <div className="write-review-page">
@@ -73,7 +111,7 @@ function WriteReview() {
               Cancel
             </button>
 
-            <button type="submit" className="submit-review-button">
+            <button onClick={submitReview} type="submit" className="submit-review-button">
               Submit Review
             </button>
           </div>

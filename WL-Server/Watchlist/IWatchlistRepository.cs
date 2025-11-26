@@ -6,6 +6,10 @@ public interface IWatchlistRepository
     public Watchlist[] GetWatchlist(Watchlist watchlist);
 
     public Watchlist GetWatchlistById(Watchlist watchlist);
+
+    public int GetMovieById(int movieId);
+    
+    public bool AddMovie(int movieId, string movieTitle);
     
     public void Create(Watchlist watchlist);
 

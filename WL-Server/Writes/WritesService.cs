@@ -15,15 +15,16 @@ public class WritesService : IWritesService
     }
     
     // GRAB WRITES FOR MOVIE
-    public Writes[] FetchWritesByMovieId(Writes writes)
+    public List<Writes>  FetchWritesByMovieId(Writes writes)
     {
         
         // GRAB FETCH METHOD FROM WRITES REPOSITORY
         // CHECK TO SEE IF WRITES EXISTS
+        Console.WriteLine(writes.MovieId);
         var writesList = _writesRepository.GetWritesByMovieId(writes);
 
         
-        if (writesList.Length == 0)
+        if (writesList.Count == 0)
         {
             //EMPTY, RETURN NULL
             return null;
@@ -70,11 +71,25 @@ public class WritesService : IWritesService
     }
 
     // CREATE A WRITES FOR MOVIE
-    public bool CreateWrites(Writes writes)
+    public bool CreateWrites(Writes writes, string movieTitle)
     {
         if (writes.UserId == null)
         {
             return false;
+        }
+        
+        //CHECK IF MOVIE EXISTS IN DB, IF NOT ADD IT INTO DB
+        int movieId = (int)writes.MovieId;
+        Console.WriteLine("checking ...");
+        var movieExists = _writesRepository.GetMovieById(movieId);
+
+        //var movieId = (int) watchlist.MovieId;
+
+        Console.WriteLine("Movie found: " + movieExists);
+        if (movieExists == 0)
+        {
+            Console.WriteLine("movie not found .. lets add");
+            _writesRepository.AddMovie(movieId, movieTitle);
         }
         
         //CREATE WRITES

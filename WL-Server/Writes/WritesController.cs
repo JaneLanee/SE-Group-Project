@@ -1,8 +1,23 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WL_Server.Writes;
 
+public class WritesDTO
+{
+    public int? MovieId { get; set; }
+    
+    public string? MovieTitle { get; set; }
+    
+    public float? Rating { get; set; }
+    
+    public string? Comment { get; set; }
+    
+}
+
+//[Authorize(Policy = "UserOnly")]
 [ApiController]
 [Route("api/[controller]")]
 public class WritesController : ControllerBase
@@ -17,7 +32,7 @@ public class WritesController : ControllerBase
     }
     
     // FETCH WRITES FOR USER
-    [HttpGet("{userId}")]
+    [HttpGet("userWrites")]
     public IActionResult GetUserWrites([FromQuery] int userId)
     {
         //STORE USERID FROM QUERY
@@ -38,7 +53,7 @@ public class WritesController : ControllerBase
     
     // FETCH WRITES FOR MOVIE
     [HttpGet("{movieId}")]
-    public IActionResult GetMovieWrites([FromQuery] int movieId)
+    public IActionResult GetMovieWrites([FromRoute] int movieId)
     {
         //STORE USERID FROM QUERY
         var input = new Writes();
@@ -50,15 +65,16 @@ public class WritesController : ControllerBase
             var writes = _writesService.FetchWritesByMovieId(input);
             return Ok(writes);
         }
-        catch
+        catch(Exception e)
         {
+            Console.WriteLine(e);
             return Ok("Error");
         }
     }
     
     // FETCH ALL WRITES
     [HttpGet("")]
-    public IActionResult GetMovieWrites()
+    public IActionResult GetAllWrites()
     {
         try
         {
@@ -72,21 +88,22 @@ public class WritesController : ControllerBase
         }
     }
 
-    [HttpPost("{userId}/{movieId}")]
-    public IActionResult CreateWrites([FromQuery] int movieId, [FromQuery] int userId, [FromBody] float rating, [FromBody] string comment, [FromBody] DateTime datePosted, [FromBody] int upvoteCount)
+    //CREATE WRITES
+    [HttpPost("add")]
+    public IActionResult CreateWrites([FromBody] WritesDTO writes)
     {
         try
         {
             //
             var input = new Writes();
-            input.UserId = userId;
-            input.MovieId = movieId;
-            input.Rating = rating;
-            input.Comment = comment;
-            input.DatePosted = datePosted;
-            input.UpvoteCount = upvoteCount;
+            input.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            input.MovieId = writes.MovieId;
+            input.Rating = writes.Rating;
+            input.Comment = writes.Comment;
+            input.DatePosted = DateTime.Now;
+            input.UpvoteCount = 0;
 
-            _writesService.CreateWrites(input);
+            _writesService.CreateWrites(input, writes.MovieTitle);
             return Ok("Success");
         }
         catch
@@ -95,7 +112,7 @@ public class WritesController : ControllerBase
         }
     }
 
-    [HttpPut("{userID}/{movieID}")]
+    [HttpPut("update")]
     public IActionResult UpdateUpvoteCount([FromRoute] int userId, [FromRoute] int movieId, [FromBody] int upvoteCount)
     {
         var input = new Writes();
@@ -114,7 +131,7 @@ public class WritesController : ControllerBase
         }
     }
 
-    [HttpDelete("{userId}/{movieId}")]
+    [HttpDelete("delete")]
     public IActionResult DeleteWrites([FromRoute] int userId, [FromRoute] int movieId)
     {
         var input = new Writes();

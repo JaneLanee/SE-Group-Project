@@ -6,7 +6,7 @@ namespace WL_Server.Recommend;
 
 public class RecommendRepository : IRecommendRepository
 {
-    public Recommend GetMovieById(Recommend movie)
+    public Recommend GetMovieById(int movieId)
     {
         //INITIALIZE RESULT INFO
         var result = new Recommend();
@@ -21,7 +21,7 @@ public class RecommendRepository : IRecommendRepository
 
                 var cmd = new MySqlCommand(query, db.Conn);
 
-                cmd.Parameters.AddWithValue("@movieId", movie.MovieId);
+                cmd.Parameters.AddWithValue("@movieId", movieId);
 
                 using var myReader = cmd.ExecuteReader();
 
@@ -87,10 +87,13 @@ public class RecommendRepository : IRecommendRepository
         return result;
     }
 
-    public bool AddMovie(Recommend movie)
+    public bool AddMovie(int movieId, string movieTitle)
     {
         //INITIALIZE CONNECTION FOR DB LOGIC
         var db = new DBConn();
+        var movie = new Recommend();
+        movie.MovieId = movieId;
+        movie.MovieTitle = movieTitle;
         if (db.IsConnected())
         {
             try

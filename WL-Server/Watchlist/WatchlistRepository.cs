@@ -17,7 +17,7 @@ public class WatchlistRepository : IWatchlistRepository
         if (db.IsConnected())
         {
             //QUERY TO GRAB USER WATCHLIST
-            string query = "SELECT * FROM Watchlist WHERE User_Id = @userId";
+            string query = "SELECT User_Id, Movie_Id, date_added FROM Watchlist WHERE User_Id = @userId";
             var cmd = new MySqlCommand(query, db.Conn);
 
             cmd.Parameters.AddWithValue("@userId", watchlist.UserId);
@@ -33,9 +33,9 @@ public class WatchlistRepository : IWatchlistRepository
 
                 results.UserId = myReader.GetInt32("User_Id");
                 results.MovieId = myReader.GetInt32("Movie_Id");
-                string watchlistStatus = myReader.GetString("status");
-                results.Status = Enum.Parse<Watchlist.StatusType>(watchlistStatus);
-                results.PersonalRating = myReader.GetFloat("personal_rating");
+                //string watchlistStatus = myReader.GetString("status");
+                //results.Status = Enum.Parse<Watchlist.StatusType>(watchlistStatus);
+                //results.PersonalRating = myReader.GetFloat("personal_rating");
                 results.DateAdded = myReader.GetDateTime("date_added");
 
                 userWatchlist[count] = results;
@@ -83,6 +83,69 @@ public class WatchlistRepository : IWatchlistRepository
         return result;
     }
 
+    public int GetMovieById(int movieId)
+    {
+        //INITIALIZE RESULT INFO
+        int foundMovieId = 0;
+        //INITIALIZE CONNECTION FOR DB LOGIC
+        var db = new DBConn();
+        if (db.IsConnected())
+        {
+            try
+            {
+                string query = "SELECT * FROM Movies WHERE Movie_Id = @movieId";
+
+                var cmd = new MySqlCommand(query, db.Conn);
+
+                cmd.Parameters.AddWithValue("@movieId", movieId);
+
+                using var myReader = cmd.ExecuteReader();
+
+                while (myReader.Read())
+                {
+                    foundMovieId = myReader.GetInt32("Movie_Id");
+                }
+                Console.WriteLine("foundMovieId: " + foundMovieId);
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        db.Close();
+        return foundMovieId;
+    }
+
+    public bool AddMovie(int movieId, string movieTitle)
+    {
+        //INITIALIZE CONNECTION FOR DB LOGIC
+        var db = new DBConn();
+        if (db.IsConnected())
+        {
+            try
+            {
+                string query = "INSERT INTO Movies (Movie_Id, title) VALUES (@movieId, @movieTitle)";
+                
+                var cmd = new MySqlCommand(query, db.Conn);
+                
+                cmd.Parameters.AddWithValue("@movieId", movieId);
+                cmd.Parameters.AddWithValue("@movieTitle", movieTitle);
+                
+                cmd.ExecuteNonQuery();
+                
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        db.Close();
+        return true;
+    }
+
     //ADD MOVIE TO WATCHLIST
     public void Create(Watchlist watchlist)
     {
@@ -95,13 +158,13 @@ public class WatchlistRepository : IWatchlistRepository
             {
                 // QUERY TO ADD MOVIE TO WATCHLIST
                 string query =
-                    "INSERT INTO Watchlist (Movie_Id, personal_rating, date_added) VALUES (@movieId, @personalRating, @dateAdded)";
+                    "INSERT INTO Watchlist (User_Id, Movie_Id, date_added) VALUES (@userId, @movieId, @dateAdded)";
 
                 var cmd = new MySqlCommand(query, db.Conn);
 
-                
+                cmd.Parameters.AddWithValue("@userId", watchlist.UserId);
                 cmd.Parameters.AddWithValue("@movieId", watchlist.MovieId);
-                cmd.Parameters.AddWithValue("@personalRating", watchlist.PersonalRating);
+                //cmd.Parameters.AddWithValue("@personalRating", watchlist.PersonalRating);
                 cmd.Parameters.AddWithValue("@dateAdded", watchlist.DateAdded);
 
                 cmd.ExecuteNonQuery();
